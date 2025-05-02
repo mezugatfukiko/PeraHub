@@ -152,8 +152,8 @@
       <p class="text-sm text-gray-600 mt-4">[Chart Placeholder]</p>
     </div>
 
-    <div class="bg-purple-100 p-4 rounded-lg shadow">
-      <h4 class="font-semibold">Add New Entry</h4>
+    <div class="bg-purple-100 p-4 rounded-lg shadow font-inter">
+      <h4 class="font-semibold font-lato">Add New Entry</h4>
       <form method="POST" class="mt-2">
         {% csrf_token %}
         <input
@@ -202,8 +202,8 @@
   </div>
 
 <!-- 📱 Card layout: visible only on small screens -->
-<div class="block md:hidden space-y-4 mt-8">
-  <h4 class="text-xl font-semibold mb-2">Entries List</h4>
+<div class="block md:hidden space-y-4 mt-8 font-inter">
+  <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
   {% for entry in entries %}
     <div class="bg-white shadow rounded p-4">
       <div class="font-bold text-lg mb-2">{{ entry.title }}</div>
@@ -224,8 +224,8 @@
  
  
  <!-- 🖥️ Table layout: visible only on medium+ screens -->
- <div class="hidden md:block mt-8">
-  <h4 class="text-xl font-semibold mb-2">Entries List</h4>
+ <div class="hidden md:block mt-8 font-inter">
+  <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
   <table class="w-full bg-white rounded shadow text-sm">
     <thead>
       <tr class="bg-purple-200 text-left">

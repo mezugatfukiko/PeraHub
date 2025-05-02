@@ -56,15 +56,6 @@
             {% endfor %}
           </div>
 
-            <!-- Username -->
-          <div class="mb-4">
-            <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
-            {{ form.username }}
-            {% for error in form.username.errors %}
-              <p class="text-red-500 text-xs">{{ error }}</p>
-            {% endfor %}
-          </div>
-
           <!-- Password -->
           <div class="mb-4">
             <label for="id_password1" class="block text-sm font-medium text-gray-700">Password</label>

@@ -11,11 +11,13 @@ def register_view(request):
     if request.method == 'POST':
         form = CustomRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')  # after registration, go to login
+            user = form.save()
+            login(request, user)  # Automatically log the user in
+            return redirect('dashboard')  # Redirect to dashboard after registration
     else:
         form = CustomRegisterForm()
     return render(request, 'finance/register.html', {'form': form})
+
 
 def login_view(request):
     if request.method == 'POST':

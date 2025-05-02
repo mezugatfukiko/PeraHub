@@ -6,8 +6,18 @@ from .forms import CustomRegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import EntryForm
 from .models import Entry
+from django.shortcuts import render
 
-
+def test_chart_view(request):
+    # Example chart data
+    chart_data = {
+        'Food': 30,
+        'Rent': 40,
+        'Utilities': 20,
+        'Entertainment': 10,
+    }
+    print(chart_data)
+    return render(request, 'finance/', {'chart_data': chart_data})
 
 def register_view(request):
     if request.method == 'POST':
@@ -45,6 +55,29 @@ def dashboard_view(request):
     expenses = sum(e.amount for e in entries if e.type == 'Expense')
     balance = income - expenses
 
+    # Calculate chart data based on expenses
+    expense_entries = entries.filter(type='Expense')
+    total_expenses = expenses if expenses != 0 else 1  # Avoid division by zero
+    
+    chart_data = {}
+    for entry in expense_entries:
+        category = entry.title  # or use a category field if you have one
+        percentage = (entry.amount / total_expenses) * 100
+        if category in chart_data:
+            chart_data[category] += percentage
+        else:
+            chart_data[category] = percentage
+
+    # Round percentages and ensure they sum to 100%
+    if chart_data:
+        chart_data = {k: round(v, 1) for k, v in chart_data.items()}
+        # Adjust for rounding errors
+        total = sum(chart_data.values())
+        if total != 100:
+            chart_data[list(chart_data.keys())[0]] += (100 - total)
+    else:
+        chart_data = {'No expenses': 100}
+
     if request.method == 'POST':
         form = EntryForm(request.POST)
         if form.is_valid():
@@ -61,6 +94,8 @@ def dashboard_view(request):
         'income': income,
         'expenses': expenses,
         'balance': balance,
+        'chart_data': chart_data,  # Add this to context
+        'user': request.user  # Also make sure user is passed
     }
     return render(request, 'finance/dashboard.html', context)
 

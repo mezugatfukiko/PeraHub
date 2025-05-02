@@ -136,9 +136,13 @@
   <div class="grid grid-cols-3 gap-4 mt-6">
     <div class="bg-purple-100 p-4 rounded-lg shadow">
       <h4 class="font-semibold">Where Your Money Goes</h4>
-      <ul class="mt-2 text-sm">
+      <div class="mt-2 relative" style="height: 200px">
+        <canvas id="expenseChart" width="400" height="400"></canvas>
+      </div>
+      <!-- Optional: Keep the percentage list below the chart -->
+      <ul class="mt-2 text-xs text-gray-600">
         {% for label, value in chart_data.items %}
-          <li>{{ label }}: {{ value }}%</li>
+        <li>{{ label }}: {{ value }}%</li>
         {% endfor %}
       </ul>
     </div>
@@ -152,15 +156,35 @@
       <h4 class="font-semibold">Add New Entry</h4>
       <form method="POST" class="mt-2">
         {% csrf_token %}
-        <input type="text" name="title" placeholder="Title" class="block w-full mb-2 p-1 border rounded" />
-        <input type="number" name="amount" placeholder="Amount" class="block w-full mb-2 p-1 border rounded" />
-        <input type="date" name="date" class="block w-full mb-2 p-1 border rounded" />
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          class="block w-full mb-2 p-1 border rounded"
+        />
+        <input
+          type="number"
+          name="amount"
+          placeholder="Amount"
+          class="block w-full mb-2 p-1 border rounded"
+        />
+        <input
+          type="date"
+          name="date"
+          class="block w-full mb-2 p-1 border rounded"
+        />
         <select name="type" class="block w-full mb-2 p-1 border rounded">
           <option>Income</option>
           <option>Expense</option>
         </select>
-        <textarea name="notes" placeholder="Notes (optional)" class="block w-full mb-2 p-1 border rounded"></textarea>
-        <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded">Add Entry</button>
+        <textarea
+          name="notes"
+          placeholder="Notes (optional)"
+          class="block w-full mb-2 p-1 border rounded"
+        ></textarea>
+        <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded">
+          Add Entry
+        </button>
       </form>
     </div>
   </div>
@@ -188,8 +212,14 @@
           <td>{{ entry.type }}</td>
           <td>{{ entry.notes }}</td>
           <td>
-            <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500">Edit</a>
-            <a href="{% url 'delete_entry' entry.id %}" class="text-red-500 ml-2">Delete</a>
+            <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500"
+              >Edit</a
+            >
+            <a
+              href="{% url 'delete_entry' entry.id %}"
+              class="text-red-500 ml-2"
+              >Delete</a
+            >
           </td>
         </tr>
         {% empty %}
@@ -201,4 +231,76 @@
     </table>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Check if chart element exists
+      const ctx = document.getElementById('expenseChart');
+      if (!ctx) {
+          console.error('Expense chart element not found');
+          return;
+      }
+
+      // Prepare chart data
+      const chartData = {
+          labels: [],
+          values: [],
+          // Purple-themed colors
+          backgroundColors: [
+              '#8B5CF6', '#7C3AED', '#6D28D9', '#5B21B6', '#4C1D95',
+              '#A78BFA', '#C4B5FD', '#EDE9FE', '#DDD6FE'
+          ]
+      };
+
+      {% if chart_data %}
+          {% for label, value in chart_data.items %}
+              chartData.labels.push("{{ label }}");
+              chartData.values.push({{ value }});
+          {% endfor %}
+      {% endif %}
+
+      // Fallback if no data
+      if (chartData.labels.length === 0) {
+          chartData.labels = ['No data'];
+          chartData.values = [100];
+          chartData.backgroundColors = ['#E5E7EB'];
+      }
+
+      // Create the chart
+      new Chart(ctx, {
+          type: 'pie',
+          data: {
+              labels: chartData.labels,
+              datasets: [{
+                  data: chartData.values,
+                  backgroundColor: chartData.backgroundColors.slice(0, chartData.labels.length),
+                  borderColor: '#FFFFFF',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: {
+                      position: 'right',
+                      labels: {
+                          usePointStyle: true,
+                          padding: 16,
+                          font: {
+                              size: 11
+                          }
+                      }
+                  },
+                  tooltip: {
+                      callbacks: {
+                          label: function(context) {
+                              return `${context.label}: ${context.raw}%`;
+                          }
+                      }
+                  }
+              }
+          }
+      });
+  });
+</script>
 {% endblock %}

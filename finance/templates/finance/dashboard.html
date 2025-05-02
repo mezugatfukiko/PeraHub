@@ -152,7 +152,7 @@
       <p class="text-sm text-gray-600 mt-4">[Chart Placeholder]</p>
     </div>
 
-    <div class="bg-purple-100 p-4 rounded-lg shadow font-inter">
+    <div class="bg-purple-100 p-4 rounded-lg shadow font-inter" x-data="{ type: 'Income' }">
       <h4 class="font-semibold font-lato">Add New Entry</h4>
       <form method="POST" class="mt-2">
         {% csrf_token %}
@@ -173,22 +173,40 @@
           name="date"
           class="block w-full mb-2 p-1 border rounded"
         />
+    
         <div class="flex gap-2 mb-2">
-          <select name="type" id="type" class="w-1/2 p-1 border rounded">
+          <!-- Type dropdown -->
+          <select name="type" id="type" class="w-1/2 p-1 border rounded" x-model="type">
             <option value="Income">Income</option>
             <option value="Expense">Expense</option>
           </select>
-          <select name="category" id="category" class="w-1/2 p-1 border rounded" disabled>
-            <option value="" disabled selected>-- Select Category --</option>
-            <option value="Food">Food</option>
-            <option value="Bill">Bill</option>
-            <option value="Travel">Travel</option>
-            <option value="Travel">Health</option>
-            <option value="Travel">Personal</option>
-            <option value="Miscellaneous">Debt</option>
-            <option value="Miscellaneous">Miscellaneous</option>
-          </select>
+    
+          <!-- Category dropdown container -->
+          <div class="relative w-1/2">
+            <select
+              name="category"
+              id="category"
+              class="p-1 border rounded w-full bg-white"
+              :disabled="type === 'Income'"
+            >
+              <option value="" disabled selected>-- Select Category --</option>
+              <option value="Food">Food</option>
+              <option value="Bill">Bill</option>
+              <option value="Travel">Travel</option>
+              <option value="Health">Health</option>
+              <option value="Personal">Personal</option>
+              <option value="Debt">Debt</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+    
+            <!-- Unclickable overlay for visual cue -->
+            <div
+              x-show="type === 'Income'"
+              class="absolute inset-0 cursor-not-allowed"
+            ></div>
+          </div>
         </div>
+    
         <textarea
           name="notes"
           placeholder="Notes (optional)"
@@ -198,7 +216,7 @@
           Add Entry
         </button>
       </form>
-    </div>
+    </div>        
   </div>
 
 <!-- 📱 Card layout: visible only on small screens -->

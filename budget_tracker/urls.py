@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from finance.views import login_view, register_view  # Import login_view and register_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('finance.urls')),  # <-- include finance app URLs
+    path('', login_view, name='login'),  # Set login_view as the default page
+    path('register/', register_view, name='register'),  # Correctly reference register_view
 ]

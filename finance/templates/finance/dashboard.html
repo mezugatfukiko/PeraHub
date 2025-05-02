@@ -77,7 +77,7 @@
 <!-- Main Dashboard Content -->
 <div class="p-6 bg-gray-100 text-gray-800">
   <!-- Greeting + Cards in one row -->
-  <div class="grid grid-cols-4 gap-4 items-center">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
     <!-- Greeting in first column, centered -->
     <div class="flex justify-center items-center h-full text-center">
       <div>
@@ -133,7 +133,7 @@
   </div>
 
   <!-- More dashboard content -->
-  <div class="grid grid-cols-3 gap-4 mt-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
     <div class="bg-purple-100 p-4 rounded-lg shadow">
       <h4 class="font-semibold">Where Your Money Goes</h4>
       <div class="mt-2 relative" style="height: 200px">
@@ -201,47 +201,63 @@
     </div>
   </div>
 
-  <!-- Entries Table -->
-  <div class="mt-8">
-    <h4 class="text-xl font-semibold mb-2">Entries List</h4>
-    <table class="w-full bg-white rounded shadow text-sm">
-      <thead>
-        <tr class="bg-purple-200 text-left">
-          <th class="p-2">Title</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Category</th>
-          <th>Notes</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for entry in entries %}
-        <tr class="border-t">
-          <td class="p-2">{{ entry.title }}</td>
-          <td>{{ entry.amount }}</td>
-          <td>{{ entry.date }}</td>
-          <td>{{ entry.type }}</td>
-          <td>{{ entry.category }}</td>
-          <td>{{ entry.notes }}</td>
-          <td>
-            <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500"
-              >Edit</a
-            >
-            <a
-              href="{% url 'delete_entry' entry.id %}"
-              class="text-red-500 ml-2"
-              >Delete</a
-            >
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" class="text-center p-4">No entries yet.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
+<!-- 📱 Card layout: visible only on small screens -->
+<div class="block md:hidden space-y-4 mt-8">
+  <h4 class="text-xl font-semibold mb-2">Entries List</h4>
+  {% for entry in entries %}
+    <div class="bg-white shadow rounded p-4">
+      <div class="font-bold text-lg mb-2">{{ entry.title }}</div>
+      <p><span class="font-semibold">Amount:</span> ₱{{ entry.amount }}</p>
+      <p><span class="font-semibold">Date:</span> {{ entry.date }}</p>
+      <p><span class="font-semibold">Type:</span> {{ entry.type }}</p>
+      <p><span class="font-semibold">Category:</span> {{ entry.category }}</p>
+      <p><span class="font-semibold">Notes:</span> {{ entry.notes|default:"—" }}</p>
+      <div class="mt-2">
+        <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500 mr-2">Edit</a>
+        <a href="{% url 'delete_entry' entry.id %}" class="text-red-500">Delete</a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="text-center text-gray-500 p-4">No entries yet.</div>
+  {% endfor %}
+ </div>
+ 
+ 
+ <!-- 🖥️ Table layout: visible only on medium+ screens -->
+ <div class="hidden md:block mt-8">
+  <h4 class="text-xl font-semibold mb-2">Entries List</h4>
+  <table class="w-full bg-white rounded shadow text-sm">
+    <thead>
+      <tr class="bg-purple-200 text-left">
+        <th class="p-2">Title</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Notes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+      <tr class="border-t">
+        <td class="p-2">{{ entry.title }}</td>
+        <td>₱{{ entry.amount }}</td>
+        <td>{{ entry.date }}</td>
+        <td>{{ entry.type }}</td>
+        <td>{{ entry.category }}</td>
+        <td>{{ entry.notes|default:"—" }}</td>
+        <td>
+          <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500">Edit</a>
+          <a href="{% url 'delete_entry' entry.id %}" class="text-red-500 ml-2">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-center p-4">No entries yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody> 
     </table>
   </div>
 </div>

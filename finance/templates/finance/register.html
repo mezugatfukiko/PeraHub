@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div style="background: radial-gradient(ellipse at center, #6B4CA9, #D1BAFF); background-size: cover; min-height: 100vh;" class="font-sans flex items-center justify-center">
+    <div class="max-w-md w-full bg-white bg-opacity-40 p-3 rounded-3xl shadow-lg text-center">
+      <div class="bg-white p-8 rounded-3xl shadow-md">
+
+        <!-- Logo Text -->
+        <div class="mx-auto mb-0 text-center text-2xl">
+          <span style="color: black;">Welcome to </span><span style="color: #8A7EBE;">Pera</span><span style="color: #F8B55F;">Hub</span><span style="color: black;">!</span>
+        </div>
+
+        <h2 class="text-xl font-light mt-3 mb-3 tracking-wide">SIGN UP</h2>
+
+        <form method="POST" class="text-left">
+          {% csrf_token %}
+
+          <!-- First Name -->
+          <div class="mb-4">
+            <label for="id_first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+            {{ form.first_name }}
+            {% for error in form.first_name.errors %}
+              <p class="text-red-500 text-xs">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <!-- Last Name -->
+          <div class="mb-4">
+            <label for="id_last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+            {{ form.last_name }}
+            {% for error in form.last_name.errors %}
+              <p class="text-red-500 text-xs">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <!-- Email -->
+          <div class="mb-4">
+            <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
+            {{ form.email }}
+            {% for error in form.email.errors %}
+              <p class="text-red-500 text-xs">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4">
+            <label for="id_password1" class="block text-sm font-medium text-gray-700">Password</label>
+            {{ form.password1 }}
+            {% for error in form.password1.errors %}
+              <p class="text-red-500 text-xs">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-4">
+            <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+            {{ form.password2 }}
+            {% for error in form.password2.errors %}
+              <p class="text-red-500 text-xs">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <button type="submit" class="w-full py-2 px-4 bg-purple-500 text-white rounded-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-3">Sign Up</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

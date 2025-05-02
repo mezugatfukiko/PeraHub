@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div style="background: radial-gradient(ellipse at center, #6B4CA9, #D1BAFF); background-size: cover; min-height: 100vh;" class="font-sans flex items-center justify-center">
+    <div class="max-w-md w-full bg-white bg-opacity-40 p-3 rounded-3xl shadow-lg text-center">
+      <div class="bg-white p-8 rounded-3xl shadow-md">
+      
+      <!-- Logo added here -->
+      <img src="{% static 'src/hb-logo.png' %}" alt="Logo" class="mx-auto mbb-0 w-40 object-contain">
+
+      <h2 class="text-xl font-light mt-3 mb-3 tracking-wide">LOGIN</h2>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-4 text-left">
+          <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+          {{ form.username }}
+          {% for error in form.username.errors %}
+            <p class="text-red-500 text-xs">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div class="mb-4 text-left">
+          <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
+          {{ form.password }}
+          {% for error in form.password.errors %}
+            <p class="text-red-500 text-xs">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <button type="submit" class="w-full py-2 px-4 bg-purple-500 text-white rounded-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Log in</button>
+      </form>
+
+      <div class="mt-4">
+        <p class="text-sm font-light">
+          Don't have an account?
+          <a href="{% url 'register' %}" class="text-black-500 hover:text-blue-700 font-bold underline">Sign Up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

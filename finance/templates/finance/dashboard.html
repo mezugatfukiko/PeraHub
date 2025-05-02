@@ -134,7 +134,7 @@
 
   <!-- More dashboard content -->
   <div class="grid grid-cols-3 gap-4 mt-6">
-    <div class="bg-purple-100 p-4 rounded-lg">
+    <div class="bg-purple-100 p-4 rounded-lg shadow">
       <h4 class="font-semibold">Where Your Money Goes</h4>
       <ul class="mt-2 text-sm">
         {% for label, value in chart_data.items %}
@@ -143,12 +143,12 @@
       </ul>
     </div>
 
-    <div class="bg-purple-100 p-4 rounded-lg">
+    <div class="bg-purple-100 p-4 rounded-lg shadow">
       <h4 class="font-semibold">Income vs Expenses</h4>
       <p class="text-sm text-gray-600 mt-4">[Chart Placeholder]</p>
     </div>
 
-    <div class="bg-purple-100 p-4 rounded-lg">
+    <div class="bg-purple-100 p-4 rounded-lg shadow">
       <h4 class="font-semibold">Add New Entry</h4>
       <form method="POST" class="mt-2">
         {% csrf_token %}

@@ -211,6 +211,7 @@
           <th>Amount</th>
           <th>Date</th>
           <th>Type</th>
+          <th>Category</th>
           <th>Notes</th>
           <th>Actions</th>
         </tr>
@@ -222,6 +223,7 @@
           <td>{{ entry.amount }}</td>
           <td>{{ entry.date }}</td>
           <td>{{ entry.type }}</td>
+          <td>{{ entry.category }}</td>
           <td>{{ entry.notes }}</td>
           <td>
             <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500"

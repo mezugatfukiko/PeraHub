@@ -60,4 +60,4 @@ class LoginForm(AuthenticationForm):
 class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
-        fields = ['title', 'amount', 'date', 'type', 'notes']
+        fields = ['title', 'amount', 'date', 'type', 'category', 'notes']

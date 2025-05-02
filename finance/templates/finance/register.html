@@ -16,8 +16,10 @@
         <form method="POST" class="text-left">
           {% csrf_token %}
 
+        <!-- First and Last Name Side by Side -->
+        <div class="flex gap-4 mb-4">
           <!-- First Name -->
-          <div class="mb-4">
+          <div class="w-1/2">
             <label for="id_first_name" class="block text-sm font-medium text-gray-700">First Name</label>
             {{ form.first_name }}
             {% for error in form.first_name.errors %}
@@ -26,19 +28,29 @@
           </div>
 
           <!-- Last Name -->
-          <div class="mb-4">
+          <div class="w-1/2">
             <label for="id_last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
             {{ form.last_name }}
             {% for error in form.last_name.errors %}
               <p class="text-red-500 text-xs">{{ error }}</p>
             {% endfor %}
           </div>
+        </div>
 
           <!-- Email -->
           <div class="mb-4">
             <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
             {{ form.email }}
             {% for error in form.email.errors %}
+              <p class="text-red-500 text-xs">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+            <!-- Username -->
+          <div class="mb-4">
+            <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+            {{ form.username }}
+            {% for error in form.username.errors %}
               <p class="text-red-500 text-xs">{{ error }}</p>
             {% endfor %}
           </div>

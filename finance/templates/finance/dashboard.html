@@ -173,10 +173,22 @@
           name="date"
           class="block w-full mb-2 p-1 border rounded"
         />
-        <select name="type" class="block w-full mb-2 p-1 border rounded">
-          <option>Income</option>
-          <option>Expense</option>
-        </select>
+        <div class="flex gap-2 mb-2">
+          <select name="type" id="type" class="w-1/2 p-1 border rounded">
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+          </select>
+          <select name="category" id="category" class="w-1/2 p-1 border rounded" disabled>
+            <option value="" disabled selected>-- Select Category --</option>
+            <option value="Food">Food</option>
+            <option value="Bill">Bill</option>
+            <option value="Travel">Travel</option>
+            <option value="Travel">Health</option>
+            <option value="Travel">Personal</option>
+            <option value="Miscellaneous">Debt</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
         <textarea
           name="notes"
           placeholder="Notes (optional)"
@@ -232,6 +244,15 @@
   </div>
 </div>
 <script>
+   document.getElementById("type").addEventListener("change", function() {
+   var categorySelect = document.getElementById("category");
+   if (this.value === "Expense") {
+     categorySelect.disabled = false;
+   } else {
+     categorySelect.disabled = true;
+     categorySelect.value = "";  // Reset category selection when not "Expense"
+   }
+ });
   document.addEventListener('DOMContentLoaded', function() {
       // Check if chart element exists
       const ctx = document.getElementById('expenseChart');

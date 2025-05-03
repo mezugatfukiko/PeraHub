@@ -341,7 +341,7 @@
       </div>
 
       <!-- Category (only visible for Expense) -->
-      <div id="category_wrapper" class="w-full sm:w-1/2 md:w-1/4">
+      <div id="category_wrapper" class="hidden">
         <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
         <select name="category" id="category"
           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
@@ -504,25 +504,30 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const entryType = document.getElementById('entry_type');
-      const categoryWrapper = document.getElementById('category_wrapper');
-      const categorySelect = document.getElementById('category');
+    function toggleAllCategoryDropdowns() {
+      const entryTypeSelects = document.querySelectorAll('select[name="entry_type"]');
+      const categoryWrappers = document.querySelectorAll('#category_wrapper');
+      const categorySelects = document.querySelectorAll('select[name="category"]');
 
-      function toggleCategoryDropdown() {
-        const type = entryType.value;
-        const isExpense = type === 'Expense';
-        categoryWrapper.style.display = isExpense ? 'block' : 'none';
-        categorySelect.disabled = !isExpense;
-        if (!isExpense) {
-          categorySelect.value = ""; // Reset if not Expense
+      entryTypeSelects.forEach((entryTypeSelect, index) => {
+        const isExpense = entryTypeSelect.value === 'Expense';
+        const wrapper = categoryWrappers[index];
+        const select = categorySelects[index];
+
+        if (wrapper && select) {
+          wrapper.style.display = isExpense ? 'block' : 'none';
+          select.disabled = !isExpense;
+          if (!isExpense) {
+            select.value = '';
+          }
         }
-      }
 
-      // Run once on load
-      toggleCategoryDropdown();
+        // Add event listener
+        entryTypeSelect.addEventListener('change', toggleAllCategoryDropdowns);
+      });
+    }
 
-      // Run on change
-      entryType.addEventListener('change', toggleCategoryDropdown);
+    toggleAllCategoryDropdowns(); // run once on load
     });
        document.addEventListener('DOMContentLoaded', function() {
            // Check if chart element exists

@@ -8,16 +8,6 @@ from .forms import EntryForm
 from .models import Entry
 from django.shortcuts import render
 
-def test_chart_view(request):
-    # Example chart data
-    chart_data = {
-        'Food': 30,
-        'Rent': 40,
-        'Utilities': 20,
-        'Entertainment': 10,
-    }
-    print(chart_data)
-    return render(request, 'finance/', {'chart_data': chart_data})
 
 def register_view(request):
     if request.method == 'POST':
@@ -55,26 +45,32 @@ def dashboard_view(request):
     expenses = sum(e.amount for e in entries if e.type == 'Expense')
     balance = income - expenses
 
-    # Calculate chart data based on expenses
+    # Calculate chart data based on expense CATEGORIES (not titles)
     expense_entries = entries.filter(type='Expense')
     total_expenses = expenses if expenses != 0 else 1  # Avoid division by zero
     
     chart_data = {}
     for entry in expense_entries:
-        category = entry.title  # or use a category field if you have one
-        percentage = (entry.amount / total_expenses) * 100
+        category = entry.category  # Use the category field instead of title
+        if not category:  # Handle empty categories (fallback)
+            category = "Uncategorized"
+        amount = entry.amount
         if category in chart_data:
-            chart_data[category] += percentage
+            chart_data[category] += amount
         else:
-            chart_data[category] = percentage
+            chart_data[category] = amount
 
-    # Round percentages and ensure they sum to 100%
+    # Convert amounts to percentages
     if chart_data:
-        chart_data = {k: round(v, 1) for k, v in chart_data.items()}
-        # Adjust for rounding errors
-        total = sum(chart_data.values())
-        if total != 100:
-            chart_data[list(chart_data.keys())[0]] += (100 - total)
+        chart_data = {
+            category: round((amount / total_expenses) * 100, 1)
+            for category, amount in chart_data.items()
+        }
+        # Adjust for rounding errors (ensure total = 100%)
+        total_percent = sum(chart_data.values())
+        if total_percent != 100:
+            largest_category = max(chart_data, key=chart_data.get)
+            chart_data[largest_category] += 100 - total_percent
     else:
         chart_data = {'No expenses': 100}
 
@@ -94,8 +90,8 @@ def dashboard_view(request):
         'income': income,
         'expenses': expenses,
         'balance': balance,
-        'chart_data': chart_data,  # Add this to context
-        'user': request.user  # Also make sure user is passed
+        'chart_data': chart_data,
+        'user': request.user
     }
     return render(request, 'finance/dashboard.html', context)
 

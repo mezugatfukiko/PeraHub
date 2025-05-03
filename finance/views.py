@@ -41,39 +41,52 @@ def logout_view(request):
 @login_required
 def dashboard_view(request):
     entries = Entry.objects.filter(user=request.user).order_by('-date')
+    
+    # Calculate totals
     income = sum(e.amount for e in entries if e.type == 'Income')
     expenses = sum(e.amount for e in entries if e.type == 'Expense')
-    balance = income - expenses
+    balance = income - expenses  # Remaining funds after expenses
 
-    # Calculate chart data based on expense CATEGORIES (not titles)
+    # --- PIE CHART (Category-Based) ---
     expense_entries = entries.filter(type='Expense')
     total_expenses = expenses if expenses != 0 else 1  # Avoid division by zero
     
     chart_data = {}
     for entry in expense_entries:
-        category = entry.category  # Use the category field instead of title
-        if not category:  # Handle empty categories (fallback)
-            category = "Uncategorized"
-        amount = entry.amount
+        category = entry.category or "Uncategorized"  # Use category field
         if category in chart_data:
-            chart_data[category] += amount
+            chart_data[category] += entry.amount
         else:
-            chart_data[category] = amount
-
+            chart_data[category] = entry.amount
+    
     # Convert amounts to percentages
     if chart_data:
-        chart_data = {
-            category: round((amount / total_expenses) * 100, 1)
-            for category, amount in chart_data.items()
-        }
-        # Adjust for rounding errors (ensure total = 100%)
-        total_percent = sum(chart_data.values())
-        if total_percent != 100:
-            largest_category = max(chart_data, key=chart_data.get)
-            chart_data[largest_category] += 100 - total_percent
+        chart_data = {k: round((v / total_expenses) * 100, 1) for k, v in chart_data.items()}
+        # Adjust rounding errors
+        if sum(chart_data.values()) != 100:
+            chart_data[max(chart_data, key=chart_data.get)] += 100 - sum(chart_data.values())
     else:
         chart_data = {'No expenses': 100}
 
+    # --- BAR GRAPH (Income vs Expenses) ---
+    # New: Calculate "remaining income" (income - expenses)
+    remaining_income = max(income - expenses, 0)  # Prevent negative values
+    bar_data = {
+        'labels': ['Income', 'Expenses', 'Remaining'],
+        'datasets': [
+            {
+                'label': 'Amount (₱)',
+                'data': [income, expenses, remaining_income],
+                'backgroundColor': [
+                    '#4CAF50',  # Green for income
+                    '#F44336',  # Red for expenses
+                    '#2196F3',  # Blue for remaining
+                ],
+            }
+        ]
+    }
+
+    # Form handling
     if request.method == 'POST':
         form = EntryForm(request.POST)
         if form.is_valid():
@@ -91,6 +104,7 @@ def dashboard_view(request):
         'expenses': expenses,
         'balance': balance,
         'chart_data': chart_data,
+        'bar_data': bar_data,  # Pass bar graph data to template
         'user': request.user
     }
     return render(request, 'finance/dashboard.html', context)

@@ -296,37 +296,169 @@
       </form>
     </div>
   </div>
-
+  
   <!-- 📱 Card layout: visible only on small screens -->
   <div class="block md:hidden space-y-4 mt-8 font-inter">
     <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
-    {% for entry in entries %}
-    <div class="bg-white shadow rounded p-4">
-      <div class="font-bold text-lg mb-2">{{ entry.title }}</div>
-      <p><span class="font-semibold">Amount:</span> ₱{{ entry.amount }}</p>
-      <p><span class="font-semibold">Date:</span> {{ entry.date }}</p>
-      <p><span class="font-semibold">Type:</span> {{ entry.type }}</p>
-      <p><span class="font-semibold">Category:</span> {{ entry.category }}</p>
-      <p>
-        <span class="font-semibold">Notes:</span> {{ entry.notes|default:"—" }}
-      </p>
-      <div class="mt-2">
-        <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500 mr-2"
-          >Edit</a
-        >
-        <a href="{% url 'delete_entry' entry.id %}" class="text-red-500"
-          >Delete</a
-        >
+
+    <!-- Form to filter entries, should only appear once -->
+    <form method="GET" action="{% url 'export_csv' %}" class="mb-4 flex flex-wrap gap-4">
+      <!-- Start Date -->
+      <div class="w-full sm:w-1/2 md:w-1/4">
+        <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+        <input
+          type="date"
+          name="start_date"
+          id="start_date"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+        />
       </div>
-    </div>
+
+      <!-- End Date -->
+      <div class="w-full sm:w-1/2 md:w-1/4">
+        <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+        <input
+          type="date"
+          name="end_date"
+          id="end_date"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+        />
+      </div>
+
+      <!-- Type -->
+      <div class="w-full sm:w-1/2 md:w-1/4">
+        <label for="entry_type" class="block text-sm font-medium text-gray-700">Type</label>
+        <select
+          name="entry_type"
+          id="entry_type"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+          onchange="toggleCategoryDropdown()"
+        >
+          <option value="">All</option>
+          <option value="Income">Income</option>
+          <option value="Expense">Expense</option>
+        </select>
+      </div>
+
+      <!-- Category (only visible for Expense) -->
+      <div id="category_wrapper" class="w-full sm:w-1/2 md:w-1/4">
+        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+        <select name="category" id="category"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+          <option value="">All</option>
+          <option value="Food">Food</option>
+          <option value="Bill">Bill</option>
+          <option value="Travel">Travel</option>
+          <option value="Health">Health</option>
+          <option value="Personal">Personal</option>
+          <option value="Debt">Debt</option>
+          <option value="Miscellaneous">Miscellaneous</option>
+        </select>
+      </div>
+
+      <!-- Export Button -->
+      <div class="w-full sm:w-auto flex items-end justify-start md:justify-end">
+        <button
+          type="submit"
+          class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+        >
+          Export to CSV
+        </button>
+      </div>
+    </form>
+
+    <!-- Entries list, one per entry -->
+    {% for entry in entries %}
+      <div class="bg-white shadow rounded p-4 mt-4">
+        <div class="font-bold text-lg mb-2">{{ entry.title }}</div>
+        <p><span class="font-semibold">Amount:</span> ₱{{ entry.amount }}</p>
+        <p><span class="font-semibold">Date:</span> {{ entry.date }}</p>
+        <p><span class="font-semibold">Type:</span> {{ entry.type }}</p>
+        <p><span class="font-semibold">Category:</span> {{ entry.category }}</p>
+        <p>
+          <span class="font-semibold">Notes:</span> {{ entry.notes|default:"—" }}
+        </p>
+        <div class="mt-2">
+          <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500 mr-2">Edit</a>
+          <a href="{% url 'delete_entry' entry.id %}" class="text-red-500">Delete</a>
+        </div>
+      </div>
     {% empty %}
-    <div class="text-center text-gray-500 p-4">No entries yet.</div>
+      <div class="text-center text-gray-500 p-4">No entries yet.</div>
     {% endfor %}
   </div>
 
+
+
   <!-- 🖥️ Table layout: visible only on medium+ screens -->
   <div class="hidden md:block mt-8 font-inter">
-    <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
+    <div class="flex justify-between items-center mb-2">
+      <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
+      <form method="GET" action="{% url 'export_csv' %}" class="mb-4 flex gap-4 flex-wrap">
+        <!-- Start Date -->
+        <div>
+          <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+          <input
+            type="date"
+            name="start_date"
+            id="start_date"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+          />
+        </div>
+      
+        <!-- End Date -->
+        <div>
+          <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+          <input
+            type="date"
+            name="end_date"
+            id="end_date"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+          />
+        </div>
+      
+        <!-- Type -->
+        <div>
+          <label for="entry_type" class="block text-sm font-medium text-gray-700">Type</label>
+          <select
+            name="entry_type"
+            id="entry_type"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+            onchange="toggleCategoryDropdown()"
+          >
+            <option value="">All</option>
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+          </select>
+        </div>
+      
+        <!-- Category (only visible for Expense) -->
+        <div id="category_wrapper">
+          <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+          <select name="category" id="category"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+            <option value="">All</option>
+            <option value="Food">Food</option>
+            <option value="Bill">Bill</option>
+            <option value="Travel">Travel</option>
+            <option value="Health">Health</option>
+            <option value="Personal">Personal</option>
+            <option value="Debt">Debt</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+      
+        <!-- Export Button -->
+        <div class="flex items-end">
+          <button
+            type="submit"
+            class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+          >
+            Export to CSV
+          </button>
+        </div>
+      </div>
+    </form> 
     <table class="table-auto table-fixed w-full bg-white rounded shadow text-sm">
       <thead>
         <tr class="bg-purple-200 text-left">
@@ -371,15 +503,27 @@
   </div>
 </div>
 <script>
-        document.getElementById("type").addEventListener("change", function() {
-        var categorySelect = document.getElementById("category");
-        if (this.value === "Expense") {
-          categorySelect.disabled = false;
-        } else {
-          categorySelect.disabled = true;
-          categorySelect.value = "";  // Reset category selection when not "Expense"
+    document.addEventListener('DOMContentLoaded', function () {
+      const entryType = document.getElementById('entry_type');
+      const categoryWrapper = document.getElementById('category_wrapper');
+      const categorySelect = document.getElementById('category');
+
+      function toggleCategoryDropdown() {
+        const type = entryType.value;
+        const isExpense = type === 'Expense';
+        categoryWrapper.style.display = isExpense ? 'block' : 'none';
+        categorySelect.disabled = !isExpense;
+        if (!isExpense) {
+          categorySelect.value = ""; // Reset if not Expense
         }
-      });
+      }
+
+      // Run once on load
+      toggleCategoryDropdown();
+
+      // Run on change
+      entryType.addEventListener('change', toggleCategoryDropdown);
+    });
        document.addEventListener('DOMContentLoaded', function() {
            // Check if chart element exists
            const ctx = document.getElementById('expenseChart');

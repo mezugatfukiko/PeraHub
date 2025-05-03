@@ -7,6 +7,10 @@ from django.contrib.auth.decorators import login_required
 from .forms import EntryForm
 from .models import Entry
 from django.shortcuts import render
+import csv
+from django.http import HttpResponse
+from datetime import datetime
+from .models import Entry
 
 
 def register_view(request):
@@ -130,3 +134,33 @@ def delete_entry(request, entry_id):
         entry.delete()
         return redirect('dashboard')
     return render(request, 'finance/confirm_delete.html', {'entry': entry})
+
+
+def export_csv(request):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    category = request.GET.get('category')
+    entry_type = request.GET.get('entry_type')
+
+    transactions = Entry.objects.filter(user=request.user)
+
+    if start_date:
+        transactions = transactions.filter(date__gte=start_date)
+    if end_date:
+        transactions = transactions.filter(date__lte=end_date)
+    if entry_type:
+        transactions = transactions.filter(type=entry_type)
+    if category and (entry_type == 'Expense' or not entry_type):
+        transactions = transactions.filter(category=category)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="transactions.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Date', 'Amount', 'Category', 'Type', 'Notes'])
+
+    for t in transactions:
+        writer.writerow([t.date, t.amount, t.category, t.type, t.notes])
+
+    return response
+

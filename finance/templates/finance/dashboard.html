@@ -601,61 +601,106 @@
        });
 
     // Income vs Expenses Bar Chart
-  const incomeExpenseCtx = document.getElementById('incomeExpenseChart');
-  if (incomeExpenseCtx) {
-      new Chart(incomeExpenseCtx, {
+    const incomeExpenseCtx = document.getElementById('incomeExpenseChart');
+    if (incomeExpenseCtx) {
+        new Chart(incomeExpenseCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Income', 'Expenses'],
+                datasets: [{
+                    label: 'Amount',
+                    data: [{{ income }}, {{ expenses }}],
+                    backgroundColor: [
+                        '#8B5CF6',
+                        '#F59E0B'
+                    ],
+                    borderColor: [
+                        '#9333EA', // Darker purple border
+                        '#DB2777'  // Darker pink border
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 4, // Rounded corners
+                    barPercentage: 0.9 // Width of bars
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // Hide legend for simple comparison
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `₱${context.raw.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#E5E7EB' // Light gray grid lines
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '₱' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false // Remove vertical grid lines
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+  // Monthly Comparison Bar Chart
+  const monthlyComparisonCtx = document.getElementById('incomeExpenseChart');
+  if (monthlyComparisonCtx) {
+      new Chart(monthlyComparisonCtx, {
           type: 'bar',
           data: {
-              labels: ['Income', 'Expenses'],
-              datasets: [{
-                  label: 'Amount',
-                  data: [{{ income }}, {{ expenses }}],
-                  backgroundColor: [
-                      '#8B5CF6', // Purple for income
-                      '#F59E0B'  // Amber for expenses
-                  ],
-                  borderColor: [
-                      '#9333EA', // Darker purple border
-                      '#B45309'  // Darker amber border
-                  ],
-                  borderWidth: 1,
-                  borderRadius: 4,
-                  barPercentage: 0.9
-              }]
+              labels: {{ monthly_bar_data.labels|safe }},
+              datasets: [
+                  {
+                      label: 'Income',
+                      data: {{ monthly_bar_data.income|safe }},
+                      backgroundColor: '#8B5CF6',
+                      borderColor: '#9333EA',
+                      borderWidth: 1,
+                      borderRadius: 4
+                  },
+                  {
+                      label: 'Expenses',
+                      data: {{ monthly_bar_data.expenses|safe }},
+                      backgroundColor: '#F59E0B',
+                      borderColor: '#B45309',
+                      borderWidth: 1,
+                      borderRadius: 4
+                  }
+              ]
           },
           options: {
               responsive: true,
               maintainAspectRatio: false,
-              animation: {
-                  duration: 1500,          // Animation duration (ms)
-                  easing: 'easeOutQuart',  // Smooth easing function
-                  delay: function(context) {
-                      // Staggered animation (income first, then expenses)
-                      return context.dataIndex * 300;
-                  },
-                  animations: {
-                      y: {
-                          // Bars grow from bottom
-                          from: 0,
-                          type: 'number',
-                          easing: 'easeOutQuad'
-                      },
-                      x: {
-                          // Slight horizontal stretch
-                          from: 0.8,
-                          to: 1,
-                          type: 'number'
-                      }
-                  }
-              },
               plugins: {
                   legend: {
-                      display: false
+                      position: 'top',
+                      labels: {
+                          usePointStyle: true,
+                          padding: 20
+                      }
                   },
                   tooltip: {
                       callbacks: {
                           label: function(context) {
-                              return `₱${context.raw.toLocaleString()}`;
+                              return `${context.dataset.label}: ₱${context.raw.toLocaleString()}`;
                           }
                       }
                   }
@@ -663,9 +708,7 @@
               scales: {
                   y: {
                       beginAtZero: true,
-                      grid: {
-                          color: '#E5E7EB'
-                      },
+                      grid: { color: '#E5E7EB' },
                       ticks: {
                           callback: function(value) {
                               return '₱' + value.toLocaleString();
@@ -673,9 +716,7 @@
                       }
                   },
                   x: {
-                      grid: {
-                          display: false
-                      }
+                      grid: { display: false }
                   }
               }
           }

@@ -12,6 +12,9 @@ from django.http import HttpResponse
 from datetime import datetime
 from .models import Entry
 
+from django.db.models import Sum, Q
+from django.db.models.functions import TruncMonth
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -44,50 +47,62 @@ def logout_view(request):
     
 @login_required
 def dashboard_view(request):
+    # Get all entries for the user
     entries = Entry.objects.filter(user=request.user).order_by('-date')
     
-    # Calculate totals
+    # --- CALCULATE TOTALS ---
     income = sum(e.amount for e in entries if e.type == 'Income')
     expenses = sum(e.amount for e in entries if e.type == 'Expense')
-    balance = income - expenses  # Remaining funds after expenses
+    balance = income - expenses
 
-    # --- PIE CHART (Category-Based) ---
+    # --- PIE CHART DATA (By Category) ---
     expense_entries = entries.filter(type='Expense')
     total_expenses = expenses if expenses != 0 else 1  # Avoid division by zero
     
     chart_data = {}
     for entry in expense_entries:
-        category = entry.category or "Uncategorized"  # Use category field
-        if category in chart_data:
-            chart_data[category] += entry.amount
-        else:
-            chart_data[category] = entry.amount
+        category = entry.category or "Uncategorized"
+        chart_data[category] = chart_data.get(category, 0) + entry.amount
     
-    # Convert amounts to percentages
+    # Convert to percentages
     if chart_data:
         chart_data = {k: round((v / total_expenses) * 100, 1) for k, v in chart_data.items()}
-        # Adjust rounding errors
-        if sum(chart_data.values()) != 100:
-            chart_data[max(chart_data, key=chart_data.get)] += 100 - sum(chart_data.values())
+        # Adjust for rounding errors
+        total_percent = sum(chart_data.values())
+        if total_percent != 100:
+            largest_cat = max(chart_data, key=chart_data.get)
+            chart_data[largest_cat] += 100 - total_percent
     else:
         chart_data = {'No expenses': 100}
 
-    # --- BAR GRAPH (Income vs Expenses) ---
-    # New: Calculate "remaining income" (income - expenses)
-    remaining_income = max(income - expenses, 0)  # Prevent negative values
-    bar_data = {
+    # --- MONTHLY SUMMARY DATA (FIXED) ---
+    monthly_data = (
+        Entry.objects
+        .filter(user=request.user)
+        .annotate(month=TruncMonth('date'))
+        .values('month')
+        .annotate(
+            income=Sum('amount', filter=Q(type='Income')),
+            expenses=Sum('amount', filter=Q(type='Expense'))
+        )
+        .order_by('month')  # This should be at the end of the query
+    )
+
+    # Prepare monthly bar data
+    monthly_bar_data = {
+        'labels': [data['month'].strftime("%b %Y") for data in monthly_data],
+        'income': [data['income'] or 0 for data in monthly_data],
+        'expenses': [data['expenses'] or 0 for data in monthly_data]
+    }
+
+    # --- CURRENT MONTH BAR DATA ---
+    remaining_income = max(income - expenses, 0)
+    current_bar_data = {
         'labels': ['Income', 'Expenses', 'Remaining'],
-        'datasets': [
-            {
-                'label': 'Amount (₱)',
-                'data': [income, expenses, remaining_income],
-                'backgroundColor': [
-                    '#4CAF50',  # Green for income
-                    '#F44336',  # Red for expenses
-                    '#2196F3',  # Blue for remaining
-                ],
-            }
-        ]
+        'datasets': [{
+            'data': [income, expenses, remaining_income],
+            'backgroundColor': ['#8B5CF6', '#F59E0B', '#10B981'],
+        }]
     }
 
     # Form handling
@@ -108,7 +123,8 @@ def dashboard_view(request):
         'expenses': expenses,
         'balance': balance,
         'chart_data': chart_data,
-        'bar_data': bar_data,  # Pass bar graph data to template
+        'current_bar_data': current_bar_data,
+        'monthly_bar_data': monthly_bar_data,
         'user': request.user
     }
     return render(request, 'finance/dashboard.html', context)

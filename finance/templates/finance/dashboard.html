@@ -327,7 +327,7 @@
   <!-- 🖥️ Table layout: visible only on medium+ screens -->
   <div class="hidden md:block mt-8 font-inter">
     <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
-    <table class="w-full bg-white rounded shadow text-sm">
+    <table class="table-auto table-fixed w-full bg-white rounded shadow text-sm">
       <thead>
         <tr class="bg-purple-200 text-left">
           <th class="p-2">Title</th>
@@ -347,16 +347,18 @@
           <td>{{ entry.date }}</td>
           <td>{{ entry.type }}</td>
           <td>{{ entry.category }}</td>
-          <td>{{ entry.notes|default:"—" }}</td>
-          <td>
-            <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500"
-              >Edit</a
-            >
-            <a
-              href="{% url 'delete_entry' entry.id %}"
-              class="text-red-500 ml-2"
-              >Delete</a
-            >
+          <td class="max-w-[6rem] break-words text-sm text-gray-700">
+            {{ entry.notes|default:"—" }}
+          </td>
+                    <td class="px-4 py-2">
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0">
+              <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500 hover:underline">
+                Edit
+              </a>
+              <a href="{% url 'delete_entry' entry.id %}" class="text-red-500 hover:underline">
+                Delete
+              </a>
+            </div>
           </td>
         </tr>
         {% empty %}

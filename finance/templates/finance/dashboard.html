@@ -1,29 +1,38 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <!-- Alpine.js must be loaded -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+></script>
 
 <header class="bg-white shadow p-4 flex justify-between items-center">
   <!-- Logo -->
   <div class="flex items-center">
-    <img src="{% static 'src/hb-logo.png' %}" alt="Logo" class="h-10 w-auto">
+    <img src="{% static 'src/hb-logo.png' %}" alt="Logo" class="h-10 w-auto" />
   </div>
 
   <!-- Profile + Dropdown -->
-  <div x-data="{ open: false }" class="relative flex items-center cursor-pointer text-gray-800">
+  <div
+    x-data="{ open: false }"
+    class="relative flex items-center cursor-pointer text-gray-800"
+  >
     <!-- Profile Icon -->
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
-      class="h-12 w-12 text-purple-600 mr-3">
-      <path fill-rule="evenodd"
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      class="h-12 w-12 text-purple-600 mr-3"
+    >
+      <path
+        fill-rule="evenodd"
         d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 
         6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 
         12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 
         7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 
         8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 
         9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-        clip-rule="evenodd" />
+        clip-rule="evenodd"
+      />
     </svg>
 
     <!-- User Info -->
@@ -33,26 +42,44 @@
     </div>
 
     <!-- Dropdown Toggle -->
-    <svg @click="open = !open" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-      viewBox="0 0 24 24" class="h-6 w-6 text-purple-600 ml-2 hover:text-purple-800 transition">
-      <path fill-rule="evenodd"
+    <svg
+      @click="open = !open"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      class="h-6 w-6 text-purple-600 ml-2 hover:text-purple-800 transition"
+    >
+      <path
+        fill-rule="evenodd"
         d="M12 14.25a.75.75 0 0 1-.53-.22l-4.5-4.5a.75.75 
         0 1 1 1.06-1.06L12 12.19l3.97-3.97a.75.75 0 1 1 1.06 
         1.06l-4.5 4.5a.75.75 0 0 1-.53.22Z"
-        clip-rule="evenodd" />
+        clip-rule="evenodd"
+      />
     </svg>
 
     <!-- Dropdown Menu -->
-    <div x-show="open" @click.outside="open = false" x-transition
-      class="absolute top-full right-0 mt-2 w-40 bg-white border rounded shadow z-50">
+    <div
+      x-show="open"
+      @click.outside="open = false"
+      x-transition
+      class="absolute top-full right-0 mt-2 w-40 bg-white border rounded shadow z-50"
+    >
       <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit"
-          class="flex items-center w-full px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-purple-900 transition">
+        <button
+          type="submit"
+          class="flex items-center w-full px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-purple-900 transition"
+        >
           <!-- Logout Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-            viewBox="0 0 24 24" class="h-5 w-5 mr-2">
-            <path fill-rule="evenodd"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            class="h-5 w-5 mr-2"
+          >
+            <path
+              fill-rule="evenodd"
               d="M16.5 3.75a1.5 1.5 0 0 1 1.5 
               1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 
               1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 
@@ -65,7 +92,8 @@
               3a.75.75 0 0 0 1.06-1.06l-1.72-1.72H15a.75.75 
               0 0 0 0-1.5H4.06l1.72-1.72a.75.75 
               0 0 0 0-1.06Z"
-              clip-rule="evenodd" />
+              clip-rule="evenodd"
+            />
           </svg>
           Log out
         </button>
@@ -77,7 +105,9 @@
 <!-- Main Dashboard Content -->
 <div class="p-6 bg-gray-100 text-gray-800">
   <!-- Greeting + Cards in one row -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center"
+  >
     <!-- Greeting in first column, centered -->
     <div class="flex justify-center items-center h-full text-center">
       <div>
@@ -87,46 +117,79 @@
     </div>
 
     <!-- Three cards with icons --><!-- Total Income Card -->
-    <div class="bg-purple-100 p-4 rounded-lg shadow flex justify-between items-center">
+    <div
+      class="bg-purple-100 p-4 rounded-lg shadow flex justify-between items-center"
+    >
       <div>
         <h4>Total Income</h4>
         <p class="text-2xl font-bold">₱{{ income|floatformat:2 }}</p>
       </div>
       <div class="text-purple-700">
         <!-- Income Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-6 w-6"
+        >
           <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
-          <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
-          <path d="M2.25 18a.75.75 0 0 0 0 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 0 0-.75-.75H2.25Z" />
+          <path
+            fill-rule="evenodd"
+            d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z"
+            clip-rule="evenodd"
+          />
+          <path
+            d="M2.25 18a.75.75 0 0 0 0 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 0 0-.75-.75H2.25Z"
+          />
         </svg>
       </div>
     </div>
 
     <!-- Total Expenses Card -->
-    <div class="bg-purple-100 p-4 rounded-lg shadow flex justify-between items-center">
+    <div
+      class="bg-purple-100 p-4 rounded-lg shadow flex justify-between items-center"
+    >
       <div>
         <h4>Total Expenses</h4>
         <p class="text-2xl font-bold">₱{{ expenses|floatformat:2 }}</p>
       </div>
       <div class="text-red-700">
         <!-- Expense Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-6 w-6"
+        >
           <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
-          <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+          <path
+            fill-rule="evenodd"
+            d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z"
+            clip-rule="evenodd"
+          />
         </svg>
       </div>
     </div>
 
     <!-- Remaining Balance Card -->
-    <div class="bg-purple-100 p-4 rounded-lg shadow flex justify-between items-center">
+    <div
+      class="bg-purple-100 p-4 rounded-lg shadow flex justify-between items-center"
+    >
       <div>
         <h4>Remaining Balance</h4>
         <p class="text-2xl font-bold">₱{{ balance|floatformat:2 }}</p>
       </div>
       <div class="text-green-700">
         <!-- Balance Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
-          <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-6 w-6"
+        >
+          <path
+            d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z"
+          />
         </svg>
       </div>
     </div>
@@ -147,12 +210,17 @@
       </ul>
     </div>
 
-    <div class="bg-purple-100 p-4 rounded-lg shadow">
+    <div class="bg-purple-100 p-4 rounded-lg">
       <h4 class="font-semibold">Income vs Expenses</h4>
-      <p class="text-sm text-gray-600 mt-4">[Chart Placeholder]</p>
+      <div class="mt-2 relative" style="height: 200px">
+        <canvas id="incomeExpenseChart"></canvas>
+      </div>
     </div>
 
-    <div class="bg-purple-100 p-4 rounded-lg shadow font-inter" x-data="{ type: 'Income' }">
+    <div
+      class="bg-purple-100 p-4 rounded-lg shadow font-inter"
+      x-data="{ type: 'Income' }"
+    >
       <h4 class="font-semibold font-lato">Add New Entry</h4>
       <form method="POST" class="mt-2">
         {% csrf_token %}
@@ -173,14 +241,19 @@
           name="date"
           class="block w-full mb-2 p-1 border rounded"
         />
-    
+
         <div class="flex gap-2 mb-2">
           <!-- Type dropdown -->
-          <select name="type" id="type" class="w-1/2 p-1 border rounded" x-model="type">
+          <select
+            name="type"
+            id="type"
+            class="w-1/2 p-1 border rounded"
+            x-model="type"
+          >
             <option value="Income">Income</option>
             <option value="Expense">Expense</option>
           </select>
-    
+
           <!-- Category dropdown container -->
           <div class="relative w-1/2">
             <select
@@ -198,7 +271,7 @@
               <option value="Debt">Debt</option>
               <option value="Miscellaneous">Miscellaneous</option>
             </select>
-    
+
             <!-- Unclickable overlay for visual cue -->
             <div
               x-show="type === 'Income'"
@@ -206,160 +279,256 @@
             ></div>
           </div>
         </div>
-    
+
         <textarea
           name="notes"
           placeholder="Notes (optional)"
           class="block w-full mb-2 p-1 border rounded"
         ></textarea>
         <div class="flex justify-center">
-          <button type="submit" class="bg-green-700 text-white px-4 py-1 rounded hover:bg-green-600">
+          <button
+            type="submit"
+            class="bg-green-700 text-white px-4 py-1 rounded hover:bg-green-600"
+          >
             Add Entry
           </button>
         </div>
       </form>
-    </div>        
+    </div>
   </div>
 
-<!-- 📱 Card layout: visible only on small screens -->
-<div class="block md:hidden space-y-4 mt-8 font-inter">
-  <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
-  {% for entry in entries %}
+  <!-- 📱 Card layout: visible only on small screens -->
+  <div class="block md:hidden space-y-4 mt-8 font-inter">
+    <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
+    {% for entry in entries %}
     <div class="bg-white shadow rounded p-4">
       <div class="font-bold text-lg mb-2">{{ entry.title }}</div>
       <p><span class="font-semibold">Amount:</span> ₱{{ entry.amount }}</p>
       <p><span class="font-semibold">Date:</span> {{ entry.date }}</p>
       <p><span class="font-semibold">Type:</span> {{ entry.type }}</p>
       <p><span class="font-semibold">Category:</span> {{ entry.category }}</p>
-      <p><span class="font-semibold">Notes:</span> {{ entry.notes|default:"—" }}</p>
+      <p>
+        <span class="font-semibold">Notes:</span> {{ entry.notes|default:"—" }}
+      </p>
       <div class="mt-2">
-        <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500 mr-2">Edit</a>
-        <a href="{% url 'delete_entry' entry.id %}" class="text-red-500">Delete</a>
+        <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500 mr-2"
+          >Edit</a
+        >
+        <a href="{% url 'delete_entry' entry.id %}" class="text-red-500"
+          >Delete</a
+        >
       </div>
     </div>
-  {% empty %}
+    {% empty %}
     <div class="text-center text-gray-500 p-4">No entries yet.</div>
-  {% endfor %}
- </div>
- 
- 
- <!-- 🖥️ Table layout: visible only on medium+ screens -->
- <div class="hidden md:block mt-8 font-inter">
-  <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
-  <table class="w-full bg-white rounded shadow text-sm">
-    <thead>
-      <tr class="bg-purple-200 text-left">
-        <th class="p-2">Title</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Category</th>
-        <th>Notes</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for entry in entries %}
-      <tr class="border-t">
-        <td class="p-2">{{ entry.title }}</td>
-        <td>₱{{ entry.amount }}</td>
-        <td>{{ entry.date }}</td>
-        <td>{{ entry.type }}</td>
-        <td>{{ entry.category }}</td>
-        <td>{{ entry.notes|default:"—" }}</td>
-        <td>
-          <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500">Edit</a>
-          <a href="{% url 'delete_entry' entry.id %}" class="text-red-500 ml-2">Delete</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="7" class="text-center p-4">No entries yet.</td>
-      </tr>
-      {% endfor %}
-    </tbody> 
+    {% endfor %}
+  </div>
+
+  <!-- 🖥️ Table layout: visible only on medium+ screens -->
+  <div class="hidden md:block mt-8 font-inter">
+    <h4 class="text-xl font-semibold mb-2 font-lato">Entries List</h4>
+    <table class="w-full bg-white rounded shadow text-sm">
+      <thead>
+        <tr class="bg-purple-200 text-left">
+          <th class="p-2">Title</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+        <tr class="border-t">
+          <td class="p-2">{{ entry.title }}</td>
+          <td>₱{{ entry.amount }}</td>
+          <td>{{ entry.date }}</td>
+          <td>{{ entry.type }}</td>
+          <td>{{ entry.category }}</td>
+          <td>{{ entry.notes|default:"—" }}</td>
+          <td>
+            <a href="{% url 'edit_entry' entry.id %}" class="text-blue-500"
+              >Edit</a
+            >
+            <a
+              href="{% url 'delete_entry' entry.id %}"
+              class="text-red-500 ml-2"
+              >Delete</a
+            >
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center p-4">No entries yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
   </div>
 </div>
 <script>
-   document.getElementById("type").addEventListener("change", function() {
-   var categorySelect = document.getElementById("category");
-   if (this.value === "Expense") {
-     categorySelect.disabled = false;
-   } else {
-     categorySelect.disabled = true;
-     categorySelect.value = "";  // Reset category selection when not "Expense"
-   }
- });
-  document.addEventListener('DOMContentLoaded', function() {
-      // Check if chart element exists
-      const ctx = document.getElementById('expenseChart');
-      if (!ctx) {
-          console.error('Expense chart element not found');
-          return;
-      }
+        document.getElementById("type").addEventListener("change", function() {
+        var categorySelect = document.getElementById("category");
+        if (this.value === "Expense") {
+          categorySelect.disabled = false;
+        } else {
+          categorySelect.disabled = true;
+          categorySelect.value = "";  // Reset category selection when not "Expense"
+        }
+      });
+       document.addEventListener('DOMContentLoaded', function() {
+           // Check if chart element exists
+           const ctx = document.getElementById('expenseChart');
+           if (!ctx) {
+               console.error('Expense chart element not found');
+               return;
+           }
 
-      // Prepare chart data
-      const chartData = {
-          labels: [],
-          values: [],
-          // Purple-themed colors
-          backgroundColors: [
-              '#8B5CF6', '#7C3AED', '#6D28D9', '#5B21B6', '#4C1D95',
-              '#A78BFA', '#C4B5FD', '#EDE9FE', '#DDD6FE'
-          ]
-      };
+           // Prepare chart data
+           const chartData = {
+               labels: [],
+               values: [],
+               // Purple-themed colors
+               backgroundColors: [
+                   '#8B5CF6', '#7C3AED', '#6D28D9', '#5B21B6', '#4C1D95',
+                   '#A78BFA', '#C4B5FD', '#EDE9FE', '#DDD6FE'
+               ]
+           };
 
-      {% if chart_data %}
-          {% for label, value in chart_data.items %}
-              chartData.labels.push("{{ label }}");
-              chartData.values.push({{ value }});
-          {% endfor %}
-      {% endif %}
+           {% if chart_data %}
+               {% for label, value in chart_data.items %}
+                   chartData.labels.push("{{ label }}");
+                   chartData.values.push({{ value }});
+               {% endfor %}
+           {% endif %}
 
-      // Fallback if no data
-      if (chartData.labels.length === 0) {
-          chartData.labels = ['No data'];
-          chartData.values = [100];
-          chartData.backgroundColors = ['#E5E7EB'];
-      }
+           // Fallback if no data
+           if (chartData.labels.length === 0) {
+               chartData.labels = ['No data'];
+               chartData.values = [100];
+               chartData.backgroundColors = ['#E5E7EB'];
+           }
 
-      // Create the chart
-      new Chart(ctx, {
-          type: 'pie',
+           // Create the chart
+           new Chart(ctx, {
+               type: 'pie',
+               data: {
+                   labels: chartData.labels,
+                   datasets: [{
+                       data: chartData.values,
+                       backgroundColor: chartData.backgroundColors.slice(0, chartData.labels.length),
+                       borderColor: '#FFFFFF',
+                       borderWidth: 1
+                   }]
+               },
+               options: {
+                   responsive: true,
+                   maintainAspectRatio: false,
+                   plugins: {
+                       legend: {
+                           position: 'right',
+                           labels: {
+                               usePointStyle: true,
+                               padding: 16,
+                               font: {
+                                   size: 11
+                               }
+                           }
+                       },
+                       tooltip: {
+                           callbacks: {
+                               label: function(context) {
+                                   return `${context.label}: ${context.raw}%`;
+                               }
+                           }
+                       }
+                   }
+               }
+           });
+       });
+
+    // Income vs Expenses Bar Chart
+  const incomeExpenseCtx = document.getElementById('incomeExpenseChart');
+  if (incomeExpenseCtx) {
+      new Chart(incomeExpenseCtx, {
+          type: 'bar',
           data: {
-              labels: chartData.labels,
+              labels: ['Income', 'Expenses'],
               datasets: [{
-                  data: chartData.values,
-                  backgroundColor: chartData.backgroundColors.slice(0, chartData.labels.length),
-                  borderColor: '#FFFFFF',
-                  borderWidth: 1
+                  label: 'Amount',
+                  data: [{{ income }}, {{ expenses }}],
+                  backgroundColor: [
+                      '#8B5CF6', // Purple for income
+                      '#F59E0B'  // Amber for expenses
+                  ],
+                  borderColor: [
+                      '#9333EA', // Darker purple border
+                      '#B45309'  // Darker amber border
+                  ],
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  barPercentage: 0.9
               }]
           },
           options: {
               responsive: true,
               maintainAspectRatio: false,
+              animation: {
+                  duration: 1500,          // Animation duration (ms)
+                  easing: 'easeOutQuart',  // Smooth easing function
+                  delay: function(context) {
+                      // Staggered animation (income first, then expenses)
+                      return context.dataIndex * 300;
+                  },
+                  animations: {
+                      y: {
+                          // Bars grow from bottom
+                          from: 0,
+                          type: 'number',
+                          easing: 'easeOutQuad'
+                      },
+                      x: {
+                          // Slight horizontal stretch
+                          from: 0.8,
+                          to: 1,
+                          type: 'number'
+                      }
+                  }
+              },
               plugins: {
                   legend: {
-                      position: 'right',
-                      labels: {
-                          usePointStyle: true,
-                          padding: 16,
-                          font: {
-                              size: 11
-                          }
-                      }
+                      display: false
                   },
                   tooltip: {
                       callbacks: {
                           label: function(context) {
-                              return `${context.label}: ${context.raw}%`;
+                              return `₱${context.raw.toLocaleString()}`;
                           }
+                      }
+                  }
+              },
+              scales: {
+                  y: {
+                      beginAtZero: true,
+                      grid: {
+                          color: '#E5E7EB'
+                      },
+                      ticks: {
+                          callback: function(value) {
+                              return '₱' + value.toLocaleString();
+                          }
+                      }
+                  },
+                  x: {
+                      grid: {
+                          display: false
                       }
                   }
               }
           }
       });
-  });
+  }
 </script>
 {% endblock %}

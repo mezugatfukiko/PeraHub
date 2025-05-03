@@ -192,5 +192,5 @@ cython_debug/
 .DS_Store
 db.sqlite3
 .node
-
+.gitignore
 # End of https://www.toptal.com/developers/gitignore/api/django,visualstudiocode

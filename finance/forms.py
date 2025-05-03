@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from .models import Entry
 
 class CustomRegisterForm(UserCreationForm):
     username = forms.CharField(
@@ -55,3 +56,8 @@ class LoginForm(AuthenticationForm):
         'class': 'w-full p-2 text-sm rounded-md border border-gray-300 mt-1',
         # 'placeholder': 'Enter your password'
     }))
+
+class EntryForm(forms.ModelForm):
+    class Meta:
+        model = Entry
+        fields = ['title', 'amount', 'date', 'type', 'category', 'notes']

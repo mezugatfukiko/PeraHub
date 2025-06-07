@@ -11,6 +11,8 @@ import csv
 from django.http import HttpResponse
 from datetime import datetime
 from .models import Entry
+from .utils import get_ai_finance_insight
+
 
 from django.db.models import Sum, Q
 from django.db.models.functions import TruncMonth
@@ -116,6 +118,12 @@ def dashboard_view(request):
     else:
         form = EntryForm()
 
+    # --- AI Insight ---
+    entries_summary = "\n".join(
+        f"{e.date}: {e.type} {e.amount} for {e.category or 'N/A'}" for e in entries
+    )
+    ai_insight = get_ai_finance_insight(entries_summary) if entries else "No entries yet."    
+
     context = {
         'form': form,
         'entries': entries,
@@ -125,7 +133,8 @@ def dashboard_view(request):
         'chart_data': chart_data,
         'current_bar_data': current_bar_data,
         'monthly_bar_data': monthly_bar_data,
-        'user': request.user
+        'user': request.user,
+        'ai_insight': ai_insight, 
     }
     return render(request, 'finance/dashboard.html', context)
 
@@ -179,4 +188,6 @@ def export_csv(request):
         writer.writerow([t.date, t.amount, t.category, t.type, t.notes])
 
     return response
+
+
 

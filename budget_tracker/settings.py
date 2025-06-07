@@ -9,11 +9,15 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # Allow deployment to continue without dotenv
 
+# Then move ALL other imports BELOW this
 from pathlib import Path
 import os
-from dotenv import load_dotenv
-load_dotenv()  # This loads variables from .env file
 import dj_database_url
 
 DATABASES = {

@@ -1,1 +1,1 @@
-web: gunicorn budget_tracker.wsgi --log-file -
+web: gunicorn budget_tracker.wsgi --timeout 120 --workers 2

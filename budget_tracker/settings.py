@@ -13,6 +13,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+load_dotenv()  # This loads variables from .env file
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+}
+
 
 load_dotenv()
 
@@ -25,13 +32,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") # Store your key in an environment variable
 # ...existing code...secure-fh_00rw963t(86^$52c#l*5o3qfhr$4uv6oz($0fiy&$!-333*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
+# Automatically add Railway's domain if available
+if 'RAILWAY_PRIVATE_DOMAIN' in os.environ:
+    ALLOWED_HOSTS.append(os.getenv('RAILWAY_PRIVATE_DOMAIN'))
+    
+# Add localhost for development
+ALLOWED_HOSTS.extend(['localhost', '127.0.0.1'])
 
 
 # Application definition
@@ -136,6 +148,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'theme2/static_src'),
 ]
+STATIC_ROOT = BASE_DIR / "staticfiles"  # Ensure this line exists
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 
 # Default primary key field type

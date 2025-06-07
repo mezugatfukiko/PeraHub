@@ -24,9 +24,6 @@ DATABASES = {
     'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
 }
 
-
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -35,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key-for-dev-only")
 # ...existing code...secure-fh_00rw963t(86^$52c#l*5o3qfhr$4uv6oz($0fiy&$!-333*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -102,16 +99,6 @@ WSGI_APPLICATION = 'budget_tracker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PGDATABASE'),
-        'USER': os.getenv('PGUSER'),
-        'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST'),
-        'PORT': os.getenv('PGPORT', '5432'),
-    }
-}
 
 
 # Password validation

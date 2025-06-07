@@ -3,7 +3,7 @@ services:
     name: budget-tracker
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn budget_tracker.wsgi:application"
+    startCommand: "gunicorn budget_tracker.wsgi:application --timeout 120 --workers 2"
     envVars:
       - key: DATABASE_URL
         fromDatabase:

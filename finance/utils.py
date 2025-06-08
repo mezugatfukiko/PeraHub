@@ -7,11 +7,14 @@ def get_ai_finance_insight(entries):
         f"{entries}\n"
         "Insight:"
     )
-    openai.api_key = settings.OPENAI_API_KEY
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
+    client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a financial advisor providing concise budgeting insights."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=60,
         temperature=0.7,
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message.content.strip()
